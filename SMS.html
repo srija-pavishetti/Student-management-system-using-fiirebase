@@ -1,0 +1,112 @@
+<html>
+<body>
+    <input type="text" placeholder="Student RollNumber" id="roll"><br>
+    <input type="text" placeholder="Student Name" id="name"><br>
+    <input type="text" placeholder="Student Branch" id="branch"><br>
+    <input type="text" placeholder="Student Year" id="year"><br>
+    <input type="text" placeholder="Student CGPA" id="cgpa"><br>
+
+    <button id="b1">INSERT</button>
+    <button id="b2">DISPLAY</button>
+    <button id="b3">UPDATE</button>
+    <button id="b4">DELETE</button>
+
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-app.js";
+  import { getDatabase,set,ref,get,child,update,remove } from "https://www.gstatic.com/firebasejs/9.14.0/firebase-database.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDzBk-aLsNOLxYJYcTi-hlcT-SRpV8FB6E",
+    authDomain: "student-ed3f6.firebaseapp.com",
+    databaseURL: "https://student-ed3f6-default-rtdb.firebaseio.com",
+    projectId: "student-ed3f6",
+    storageBucket: "student-ed3f6.appspot.com",
+    messagingSenderId: "310414388819",
+    appId: "1:310414388819:web:d63e485582a6c06df2e0a6"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+
+  const db = getDatabase();
+  var insbutton = document.getElementById("b1");
+  var disbutton = document.getElementById("b2");
+  var upbutton = document.getElementById("b3");
+  var delbutton = document.getElementById("b4");
+
+  insbutton.addEventListener('click',insert);
+  disbutton.addEventListener('click',display);
+  upbutton.addEventListener('click',upStudent);
+  delbutton.addEventListener('click',delStudent);
+
+  function insert()
+  {
+    var r=document.getElementById("roll").value;
+    var n=document.getElementById("name").value;
+    var b=document.getElementById("branch").value;
+    var y=document.getElementById("year").value;
+    var c=document.getElementById("cgpa").value;
+
+    var ob={
+        Name:n,
+        Branch:b,
+        Year:y,
+        CGPA:c
+    }
+    set(ref(db,"SMS/"+r),ob);
+    console.log("DATA INSERTED");
+
+  }
+ 
+  function display()
+  {
+    var r = document.getElementById("roll").value;
+    var dbref =ref(db);
+    get(child(dbref,"SMS/"+r)).then(function(snapshot)
+    {
+      if(snapshot.exists())
+      {
+        console.log(snapshot.val());
+        document.getElementById("name").value=snapshot.val().Name;
+        document.getElementById("branch").value=snapshot.val().Branch;
+        document.getElementById("year").value=snapshot.val().Year;
+        document.getElementById("cgpa").value=snapshot.val().CGPA;
+      }
+      else
+        console.log("No data available");
+    });
+  }
+
+  function upStudent()
+  {
+    var r=document.getElementById("roll").value;
+    var n=document.getElementById("name").value;
+    var b=document.getElementById("branch").value;
+    var y=document.getElementById("year").value;
+    var c=document.getElementById("cgpa").value;
+
+    var ob={
+        Name:n,
+        Branch:b,
+        Year:y,
+        CGPA:c
+    }
+    update(ref(db,"SMS/"+r),ob);
+    console.log("STUDENT RECORD UPDATED");
+  }
+  function delStudent()
+  {
+    var r = document.getElementById("roll").value;
+    remove(ref(db,"SMS/"+r));
+    console.log("STUDENT RECORD DELETED")
+  }
+</script>
+</body>
+</html>
+
+
+Hide message history
